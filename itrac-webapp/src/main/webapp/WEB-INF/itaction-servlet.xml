@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context  
+    	http://www.springframework.org/schema/context/spring-context.xsd
+    	http://www.springframework.org/schema/data/mongo 
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd  ">
+		
+			<!-- ========================== MongoDB ======================== -->
+	<mongo:mongo host="127.0.0.1" port="27017">
+		<mongo:options connections-per-host="10"
+			threads-allowed-to-block-for-connection-multiplier="5"
+			connect-timeout="10000" 
+			auto-connect-retry="true" 
+			socket-keep-alive="true"
+			socket-timeout="10000" />
+	</mongo:mongo>
+
+	<context:annotation-config />
+
+	<bean id="mongoTemplate" name="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="mongo" />
+		<constructor-arg name="databaseName" value="itrac" />
+	</bean>
+
+	<context:component-scan base-package="com.shinejava" />
+
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+	<mvc:annotation-driven />
+	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+	</bean>
+
+</beans>
